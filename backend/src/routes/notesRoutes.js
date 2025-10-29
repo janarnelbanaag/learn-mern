@@ -9,7 +9,14 @@ import {
 
 const router = e.Router();
 
-router.get("/", getAllNotes);
+router.get(
+    "/",
+    (req, res, next) => {
+        console.log("getAllNotes");
+        next();
+    },
+    getAllNotes
+);
 router.get("/:id", getNoteById);
 router.post("/", addNote);
 router.put("/:id", updateNote);
