@@ -6,20 +6,18 @@ import {
     getNoteById,
     updateNote,
 } from "../controllers/notesController.js";
+import { verifyToken } from "../middleware/authMiddleware.js";
+import { rateLimitMiddleware } from "../middleware/rateLimitMiddleware.js";
 
-const router = e.Router();
+const notesRoutes = e.Router();
 
-router.get(
-    "/",
-    (req, res, next) => {
-        console.log("getAllNotes");
-        next();
-    },
-    getAllNotes
-);
-router.get("/:id", getNoteById);
-router.post("/", addNote);
-router.put("/:id", updateNote);
-router.delete("/:id", deleteNote);
+notesRoutes.use(verifyToken);
+notesRoutes.use(rateLimitMiddleware(2, 60 * 1000));
 
-export default router;
+notesRoutes.get("/", getAllNotes);
+notesRoutes.get("/:id", getNoteById);
+notesRoutes.post("/", addNote);
+notesRoutes.put("/:id", updateNote);
+notesRoutes.delete("/:id", deleteNote);
+
+export default notesRoutes;
