@@ -21,7 +21,7 @@ export const signup = async (req, res) => {
 
         const user = new User({ username, password });
         user.token = user.generateToken();
-        // user.save();
+        await user.save();
 
         res.status(201).json(user);
     } catch (error) {
